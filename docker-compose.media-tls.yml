@@ -1,0 +1,4 @@
+services:
+  coturn:
+    ports: ['5349:5349/tcp']
+    volumes: ['./certs/turn:/run/coturn/tls:ro']

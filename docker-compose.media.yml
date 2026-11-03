@@ -1,0 +1,31 @@
+services:
+  livekit:
+    image: livekit/livekit-server:v1.13.11
+    user: '0:0'
+    command: ['--config', '/etc/livekit.yaml']
+    volumes: ['./infra/livekit/livekit.generated.yaml:/etc/livekit.yaml:ro']
+    extra_hosts: ['host.docker.internal:host-gateway']
+    networks:
+      default: {}
+      media:
+        ipv4_address: ${LIVEKIT_CONTAINER_IP:-172.29.0.10}
+    environment:
+      NO_PROXY: ${NO_PROXY:-},host.docker.internal,backend,livekit,localhost,127.0.0.1
+      no_proxy: ${NO_PROXY:-},host.docker.internal,backend,livekit,localhost,127.0.0.1
+    ports: ['7880:7880', '7881:7881', '50000-50100:50000-50100/udp']
+    restart: unless-stopped
+  coturn:
+    image: coturn/coturn:4.6.3
+    user: '0:0'
+    command: ['-c', '/etc/coturn/turnserver.conf']
+    volumes: ['./coturn/turnserver.generated.conf:/etc/coturn/turnserver.conf:ro']
+    networks:
+      media:
+        ipv4_address: ${TURN_CONTAINER_IP:-172.29.0.11}
+    ports: ['3478:3478', '3478:3478/udp', '49160-49200:49160-49200/udp']
+    restart: unless-stopped
+networks:
+  media:
+    ipam:
+      config:
+        - subnet: ${MEDIA_SUBNET:-172.29.0.0/24}

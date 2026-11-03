@@ -1,0 +1,31 @@
+{
+  "name": "tetocord",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=22.19"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "concurrently -k -n api,web -c magenta,cyan \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "typecheck": "npm run typecheck --workspaces",
+    "db:migrate": "npm run db:migrate -w backend",
+    "test": "node scripts/test.mjs",
+    "test:e2e": "node tests/browser.mjs",
+    "format": "prettier --write \"frontend/src/**/*.{ts,tsx,css}\" \"backend/{src,test}/**/*.ts\" \"{tests,scripts}/*.mjs\" \"*.json\" \"{backend,frontend}/*.json\" frontend/vite.config.ts frontend/index.html docker-compose.yml README.md \"docs/*.md\"",
+    "media:configure": "node scripts/media-config.mjs",
+    "package": "python3 scripts/package.py",
+    "test:features": "node tests/features.mjs",
+    "test:media": "node tests/media.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "playwright": "^1.56.1",
+    "prettier": "^3.9.10"
+  }
+}

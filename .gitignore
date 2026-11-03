@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+test-results/
+playwright-report/
+*.log
+.DS_Store
+
+**/*.generated.*
+**/*.zip
+**/*.sha256
+certs/
